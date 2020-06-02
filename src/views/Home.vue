@@ -1,24 +1,58 @@
 <template>
     <div class="home">
         <Header page="index"/>
-        <div>
-            <el-carousel :interval="40000" :indicator-position="this.checkBrowser()===0?'':'none'" :height="this.checkBrowser()===0?'200px':'30vw'">
+        <div style="margin-top: 10px">
+            <el-carousel :interval="9000" :indicator-position="Browser===0?'':'none'"
+                         :height="Browser===0?'300px':'30vw'">
                 <el-carousel-item trigger="click" v-for="item in bannerList" :key="item.bannerId">
-                    <el-image class="elImg" @click="RouterTo(item)" fit="scale-down" style=""
+                    <el-image class="elImg" @click="RouterTo(item)" fit="scale-down"
                               :src="item.pic||item.imageUrl"></el-image>
                 </el-carousel-item>
             </el-carousel>
         </div>
-        <div style="margin-top: 10px;margin-bottom: 60px">
-            <el-row :gutter="5">
-                <el-col class="card" v-for="item in HotList"  :key="item.id" :xs="8" :sm="4" :md="4" :lg="4" :xl="4">
+        <!--        歌单-->
+        <div style="margin-top: 10px;margin-bottom: 10px">
+            <div class="mType">
+                <div class="mTypeText">精选</div>
+                <div class="mTypeChose">
+                    <span :class="[this.listType==='hot'?'hot':'']" @click="playlist('hot')">最热</span>
+                    <span class="line"></span>
+                    <span :class="[this.listType==='new'?'new':'']" @click="playlist('new')">最新</span>
+                </div>
+            </div>
+            <el-row class="mBox" :gutter="5">
+                <el-col class="card" v-for="item in HotList" :key="item.id" :xs="8" :sm="4" :md="4" :lg="4" :xl="4">
                     <el-card :body-style="{ padding: '0px' }">
-                        <img  @click="HotListTo(item)" :src="item.coverImgUrl" class="image">
-                        <div  @click="HotListTo(item)" style="padding: 10px;height: 60px;overflow: hidden">
-                            <span style="font-size: 12px;display: inline-block;height: 35px;overflow: hidden">{{item.name}}</span>
+                        <el-image fit="fill" @click="HotListTo(item)" :src="item.coverImgUrl"
+                                  :class="[Browser===0?'image':'imagePhone']"></el-image>
+
+                        <div @click="HotListTo(item)" style="padding: 10px;height: 60px;overflow: hidden">
+                            <span class="description">{{item.name}}</span>
                             <div class="bottom clearFix">
                                 <time class="time">{{item.playCount|filterNum}}</time>
-                                <el-button type="text" class="button">操作按钮</el-button>
+                                <div class="artistNameText">{{item.creator.nickname}}</div>
+                            </div>
+                        </div>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </div>
+        <!--      推荐MV  -->
+        <div style="margin-top: 10px;margin-bottom: 60px">
+            <div class="mType">
+                <div class="mTypeText">推荐 mv</div>
+            </div>
+            <el-row class="mBox" :gutter="5">
+                <el-col class="card" v-for="item in MvList" :key="item.id" :xs="8" :sm="8" :md="6" :lg="6" :xl="6">
+                    <el-card :body-style="{ padding: '0px' }">
+                        <el-image fit="fill" @click="HotListTo(item)" :src="item.picUrl"
+                                  :class="[Browser===0?'image':'imagePhone']"></el-image>
+
+                        <div @click="HotListTo(item)" style="padding: 5px;height: 60px;overflow: hidden">
+                            <span class="description">{{item.name}}</span>
+                            <div class="bottom clearFix">
+                                <time class="time">{{item.playCount|filterNum}}</time>
+                                <div class="artistNameText">{{item.artistName}}</div>
                             </div>
                         </div>
                     </el-card>
@@ -34,26 +68,31 @@
 
 <script>
     // @ is an alias to /src
-    // import HelloWorld from '@/components/HelloWorld.vue'
     import Play from '@/components/Play.vue'
     import Header from '@/components/Header.vue'
 
     export default {
         name: 'Home',
         components: {
-            // HelloWorld,
             Header,
             Play
         },
         data() {
             return {
+                listType: 'hot',//精选默认type
                 bannerList: [],//轮播图片
                 HotList: [],//热门歌曲
+                MvList: [],//Mv
             };
+        },
+        computed: {
+            Browser() {
+                return this.checkBrowser()
+            }
         },
         filters: {
             filterNum(num) {
-                if(num){
+                if (num) {
                     let numStr = num.toString()
                     // 十万以内直接返回
                     if (numStr.length < 6) {
@@ -61,15 +100,15 @@
                     }
                     //大于8位数是亿
                     else if (numStr.length > 8) {
-                        let decimal = numStr.substring(numStr.length - 8, numStr.length - 8 +1);
+                        let decimal = numStr.substring(numStr.length - 8, numStr.length - 8 + 1);
                         return parseFloat(parseInt(num / 100000000) + '.' + decimal) + '亿';
                     }
                     //大于6位数是十万 (以10W分割 10W以下全部显示)
                     else if (numStr.length > 5) {
-                        let decimal = numStr.substring(numStr.length - 4, numStr.length - 4+1 )
+                        let decimal = numStr.substring(numStr.length - 4, numStr.length - 4 + 1)
                         return parseFloat(parseInt(num / 10000) + '.' + decimal) + '万';
                     }
-                }else {
+                } else {
                     return ''
                 }
             },
@@ -77,61 +116,26 @@
         methods: {
             //点击banner
             RouterTo(item) {
-                console.log(item.targetId)
-            },
-            checkBrowser() {
-                const browser = {
-                    versions: (function () {
-                        let u = navigator.userAgent
-                        // app = navigator.appVersion;
-                        return {
-                            //移动终端浏览器版本信息
-                            trident: u.indexOf("Trident") > -1, //IE内核
-                            presto: u.indexOf("Presto") > -1, //opera内核
-                            webKit: u.indexOf("AppleWebKit") > -1, //苹果、谷歌内核
-                            gecko: u.indexOf("Gecko") > -1 && u.indexOf("KHTML") == -1, //火狐内核
-                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-                            android: u.indexOf("Android") > -1 || u.indexOf("Linux") > -1, //android终端或uc浏览器
-                            iPhone: u.indexOf("iPhone") > -1, //是否为iPhone或者QQHD浏览器
-                            iPad: u.indexOf("iPad") > -1, //是否iPad
-                            webApp: u.indexOf("Safari") == -1 //是否web应该程序，没有头部与底部
-                        };
-                    })(),
-                    language: (
-                        navigator.browserLanguage || navigator.language
-                    ).toLowerCase()
-                };
-                // console.log(this.$route.query)
-                if (browser.versions.mobile) {//判断是否是移动设备打开。browser代码在下面
-                    let ua = navigator.userAgent.toLowerCase();//获取判断用的对象
-                    if (browser.versions.ios) {
-                        if (ua.match(/ipad/i) == "ipad") {
-                            return 3 //ipad
-                        } else {
-                            return 2 //iphone
-                        }
-                        //是否在IOS浏览器打开
-
-                    }
-                    if (browser.versions.android) {
-                        //是否在安卓浏览器打开
-                        console.log('安卓浏览器打开')
-                        return 1 //安卓
-                    }
-                } else {
-                    //否则就是PC浏览器打开
-                    console.log('PC浏览器打开')
-                    return 0 //pc
-
+                if (item.targetType === 1) {
+                    this.$router.push({path: '/MusicDetail', query: {id: item.targetId}});
+                } else if (item.targetType === 1004) {
+                    this.$router.push({path: '/MvPlay', query: {id: item.targetId}});
                 }
+                console.log(item)
+                // this.$router.push({path: '/MusicListDetail', query: {id: item.targetId}});
             },
+            //跳转歌单详情页面
+            HotListTo(item) {
+                console.log(item)
+                this.$router.push({path: '/MusicListDetail', query: {id: item.id}});
+            },
+            //获取轮播图
             getBanner() {
                 this.axios({
                         method: "get",
                         url: process.env.VUE_APP_API + "/banner",
                         params: {
-                            type: this.checkBrowser() || 0,
+                            type: this.Browser || 0,
                             timestamp: new Date().getTime()
                         }
                     }
@@ -149,13 +153,17 @@
                     console.log(err)
                 })
             },
-            playlist() {
+            //获取最新或最热歌单
+            playlist(val) {
+                if (val) {
+                    this.listType = val
+                }
                 this.axios({
                         method: "get",
                         url: process.env.VUE_APP_API + "/top/playlist",
                         params: {
-                            limit: 10 ,
-                            order:'hot',
+                            limit: this.Browser === 0 ? 12 : 6,
+                            order: this.listType || 'hot',
                             timestamp: new Date().getTime()
                         }
                     }
@@ -173,14 +181,45 @@
                     console.log(err)
                 })
             },
-            HotListTo(item){
-                console.log(item)
-            }
+            //获取推荐Mv
+            personalized() {
+                this.axios({
+                        method: "get",
+                        url: process.env.VUE_APP_API + "/personalized/mv",
+                        params: {
+                            timestamp: new Date().getTime()
+                        }
+                    }
+                ).then(res => {
+                    if (res.status !== 200) {
+                        this.$message('获取Mv失败！');
+                    }
+                    console.log(res.data.result)
+                    if (res.data && res.data.result) {
+                        if (this.Browser === 0) {
+                            this.MvList = res.data.result
+                        } else {
+                            this.MvList = res.data.result.slice(0, 3)
+                        }
+
+                    } else {
+                        return []
+                    }
+
+                    // this.HotList = this._.filter(list, unit => {
+                    //     return unit.targetId !== 0
+                    // })
+                }).catch(err => {
+                    console.log(err)
+                })
+            },
+
 
         },
         created() {
             this.getBanner()
             this.playlist()
+            this.personalized()
 
         }
     }
@@ -209,14 +248,18 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
-        :hover{
+
+        :hover {
             cursor: pointer;
         }
-       /deep/ img{
+
+        /deep/ img {
             vertical-align: middle;
         }
     }
+
     .time {
+        width: 55%;
         font-size: 13px;
         color: #999;
     }
@@ -224,6 +267,7 @@
     .bottom {
         margin-top: 5px;
         line-height: 12px;
+        display: flex;
     }
 
     .button {
@@ -232,6 +276,17 @@
     }
 
     .image {
+        width: 100%;
+        display: block;
+
+        :hover {
+            transition: all 0.5s; /* 所有的属性变化在0.5s的时间段内完成 */
+            cursor: pointer;
+            transform: scale(1.2);
+        }
+    }
+
+    .imagePhone {
         width: 100%;
         display: block;
     }
@@ -245,8 +300,81 @@
     .clearFix:after {
         clear: both
     }
-    .card{
+
+    .card {
         margin-bottom: 5px;
+    }
+
+    /***********/
+    /*safari 有兼容问题*/
+    .mBox {
+        display: -webkit-flex; /* Safari */
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .mType {
+        display: -webkit-flex; /* Safari */
+        display: flex;
+        /*flex-direction: row;*/
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+
+    .mTypeText {
+        margin-left: 10px;
+        font-size: 20px;
+    }
+
+    .line {
+        margin: 0 5px;
+        display: inline-block;
+        line-height: 14px;
+        vertical-align: middle;
+        width: 1.4px;
+        height: 14px;
+        background-color: black;
+
+        :hover {
+            cursor: pointer;
+        }
+    }
+
+    .mTypeChose {
+        margin-right: 10px;
+
+        :hover {
+            cursor: pointer;
+        }
+
+        span {
+            vertical-align: middle;
+        }
+    }
+
+    .hot, .new {
+        color: #42b983;
+    }
+
+    .artistNameText {
+        font-size: 13px;
+        line-height: 13px;
+        text-align: right;
+        display: inline-block;
+        width: 45%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        margin-right: 5px;
+    }
+
+    .description {
+        font-size: 12px;
+        display: inline-block;
+        height: 35px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
 </style>

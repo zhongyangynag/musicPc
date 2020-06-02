@@ -4,12 +4,13 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-
+import {checkBrowser} from "@/utils/utils";
 
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import 'element-ui/lib/theme-chalk/display.css';
 import _ from 'lodash'
+
 Vue.use(ElementUI);
 require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
@@ -19,12 +20,13 @@ import VideoPlayer from 'vue-video-player'
 import 'videojs-contrib-hls'
 
 Vue.prototype._ = _
+Vue.prototype.checkBrowser = checkBrowser
 Vue.use(VueAxios, axios)
 Vue.use(VideoPlayer)
 Vue.config.productionTip = false
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')

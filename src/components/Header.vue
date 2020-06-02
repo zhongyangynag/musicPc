@@ -27,7 +27,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
     .header-box{
         background-color: #727272;
         color: white;
