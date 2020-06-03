@@ -1,6 +1,7 @@
 <template>
     <div class="home">
         <Header page="index"/>
+        <div style="width: 100%;height: 42px"></div>
         <div style="margin-top: 10px">
             <el-carousel :interval="9000" :indicator-position="Browser===0?'':'none'"
                          :height="Browser===0?'300px':'30vw'">
@@ -23,9 +24,7 @@
             <el-row class="mBox" :gutter="5">
                 <el-col class="card" v-for="item in HotList" :key="item.id" :xs="8" :sm="4" :md="4" :lg="4" :xl="4">
                     <el-card :body-style="{ padding: '0px' }">
-                        <el-image fit="fill" @click="HotListTo(item)" :src="item.coverImgUrl"
-                                  :class="[Browser===0?'image':'imagePhone']"></el-image>
-
+                        <el-image fit="fill" @click="HotListTo(item)" :src="item.coverImgUrl" :class="[Browser===0?'image':'imagePhone']"></el-image>
                         <div @click="HotListTo(item)" style="padding: 10px;height: 60px;overflow: hidden">
                             <span class="description">{{item.name}}</span>
                             <div class="bottom clearFix">
@@ -46,7 +45,7 @@
                 <el-col class="card" v-for="item in MvList" :key="item.id" :xs="8" :sm="8" :md="6" :lg="6" :xl="6">
                     <el-card :body-style="{ padding: '0px' }">
                         <el-image fit="fill" @click="HotListTo(item)" :src="item.picUrl"
-                                  :class="[Browser===0?'image':'imagePhone']"></el-image>
+                                  :class="[Browser===0?'imageMv':'imageMvPhone']"></el-image>
 
                         <div @click="HotListTo(item)" style="padding: 5px;height: 60px;overflow: hidden">
                             <span class="description">{{item.name}}</span>
@@ -59,23 +58,19 @@
                 </el-col>
             </el-row>
         </div>
-        <div class="play">
-            <play/>
-        </div>
+
 
     </div>
 </template>
 
 <script>
     // @ is an alias to /src
-    import Play from '@/components/Play.vue'
     import Header from '@/components/Header.vue'
 
     export default {
         name: 'Home',
         components: {
             Header,
-            Play
         },
         data() {
             return {
@@ -229,6 +224,7 @@
         min-height: 100vh;
         /*margin: 0 auto;*/
         overflow: hidden;
+        margin-bottom: 50px;
         /*background-color: red;*/
         /*max-width: 1920px;*/
     }
@@ -237,12 +233,7 @@
         background-color: transparent;
     }
 
-    .play {
-        background-color: white;
-        width: 100vw;
-        position: fixed;
-        bottom: 0;
-    }
+
 
     .elImg {
         width: 100%;
@@ -277,18 +268,71 @@
 
     .image {
         width: 100%;
+        padding-bottom: 100%;
         display: block;
-
         :hover {
             transition: all 0.5s; /* 所有的属性变化在0.5s的时间段内完成 */
             cursor: pointer;
             transform: scale(1.2);
+        }
+        /deep/img{
+            position:absolute;
+            top:0;
+            bottom:0;
+            left:0;
+            right:0;
+            width:100%;
+            margin:auto;
         }
     }
 
     .imagePhone {
         width: 100%;
         display: block;
+        padding-bottom: 100%;
+       /deep/ img{
+            position:absolute;
+            top:0;
+            bottom:0;
+            left:0;
+            right:0;
+            width:100%;
+            margin:auto;
+        }
+    }
+    .imageMv {
+        width: 100%;
+        padding-bottom: 60%;
+        display: block;
+        :hover {
+            transition: all 0.5s; /* 所有的属性变化在0.5s的时间段内完成 */
+            cursor: pointer;
+            transform: scale(1.2);
+        }
+        /deep/img{
+            position:absolute;
+            top:0;
+            bottom:0;
+            left:0;
+            right:0;
+            width:100%;
+            margin:auto;
+        }
+    }
+
+    .imageMvPhone {
+        width: 100%;
+        display: block;
+        padding-bottom: 60%;
+       /deep/ img{
+            position:absolute;
+            top:0;
+            bottom:0;
+            left:0;
+            right:0;
+            width:100%;
+            margin:auto;
+        }
     }
 
     .clearFix:before,
@@ -307,12 +351,12 @@
 
     /***********/
     /*safari 有兼容问题*/
-    .mBox {
-        display: -webkit-flex; /* Safari */
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
+    /*.mBox {*/
+    /*    !*display: -webkit-flex; !* Safari *!*!*/
+    /*    !*display: flex;*!*/
+    /*    !*flex-direction: row;*!*/
+    /*    !*flex-wrap: wrap;*!*/
+    /*}*/
 
     .mType {
         display: -webkit-flex; /* Safari */

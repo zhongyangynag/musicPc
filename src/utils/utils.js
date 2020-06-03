@@ -1,4 +1,4 @@
-export function  checkBrowser() {
+export function checkBrowser() {
     const browser = {
         versions: (function () {
             let u = navigator.userAgent
@@ -45,5 +45,46 @@ export function  checkBrowser() {
 
     }
 }
+
+//检查当前歌曲是否可用
+export function check(val) {
+    return new Promise((resolve, reject) => {
+        this.axios({
+            method: "get",
+            url: process.env.VUE_APP_API + "/check/music",
+            params: {
+                id: val,
+
+            }
+        }
+    ).then(res => {
+            resolve(res)
+
+    }).catch(error => {
+            reject(error)
+    })
+    })
+
+}
+//获取歌曲播放地址
+export function getSong(val) {
+    return new Promise((resolve, reject) => {
+        this.axios({
+            method: "get",
+            url: process.env.VUE_APP_API + "/song/url",
+            params: {
+                id: val,
+            }
+        }
+    ).then(res => {
+            resolve(res)
+
+    }).catch(error => {
+            reject(error)
+    })
+    })
+
+}
+
 
 

@@ -2,7 +2,7 @@
     <header class="header-box">
         <el-row >
             <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="1">
-                <div :class="[page==='index'?'header active':'header']">推荐</div>
+                <div @click="$router.push({path:'/'})" :class="[page==='index'?'header active':'header']">推荐</div>
             </el-col>
             <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="11">
                 <div :class="[page==='index2'?'header active':'header']" >排行榜</div>
@@ -31,8 +31,11 @@
     .header-box{
         background-color: #727272;
         color: white;
-
+        position: fixed;
+        top: 0;
+        width: 100%;
         text-align: center;
+        z-index: 5;
     }
     .header:hover {
         cursor: pointer;
