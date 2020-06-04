@@ -5,6 +5,7 @@ import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import {checkBrowser,check,getSong} from "@/utils/utils";
+import play from '@/components/Play.vue'
 
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -63,7 +64,7 @@ Vue.filter('formatName', function(value) {
 
 })
 
-
+Vue.component('Play',play)
 Vue.use(ElementUI);
 Vue.prototype._ = _
 Vue.prototype.checkBrowser = checkBrowser

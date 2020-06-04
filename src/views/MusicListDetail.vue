@@ -119,6 +119,9 @@
             //点击当前行
             clickRow(row) {
                 // console.log(row)
+                // console.log(this.$parent.$children[0])
+                let _this = this
+                // this.$parent.$children[0].$refs.player.play()
                 let pic = row.al.picUrl
                 let artist = row.ar[0].name
                 let title = row.name
@@ -129,6 +132,7 @@
                             if (res.data.data[0].url === null) {
                                 this.$message('亲爱的,这首歌播放不了哦！')
                             } else {
+                                //准备单手歌曲的数据格式
                                 let songMsg = this._.map(res.data.data, unit => {
                                     return {
                                         src: unit.url,
@@ -138,7 +142,13 @@
                                         pic
                                     }
                                 })
+                                //vuex==》替换当前歌曲
                                 this.$store.commit('changeMusic', songMsg)
+                                //设置延时，否则歌曲未加载完成就播放会是上一首歌曲的数据
+                                setTimeout(() => {
+                                    _this.$parent.$children[0].$refs.player.play()
+                                }, 600)
+                                // this.$store.commit('changePlayIng', true)
                             }
                         }).catch(error => {
                             this.$message('亲爱的,这首歌播放不了哦！')
@@ -152,6 +162,8 @@
                     this.$message('亲爱的,暂无版权')
                     console.log(err,)
                 })
+
+
                 // console.log(this.check(row.id))
             },
             //获取歌单详情
@@ -211,10 +223,11 @@
 </script>
 
 <style scoped lang="less">
-    .MusicListDetail{
+    .MusicListDetail {
 
         margin-bottom: 50px;
     }
+
     .play {
         background-color: white;
         width: 100vw;

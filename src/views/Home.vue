@@ -4,10 +4,13 @@
         <div style="width: 100%;height: 42px"></div>
         <div style="margin-top: 10px">
             <el-carousel :interval="9000" :indicator-position="Browser===0?'':'none'"
-                         :height="Browser===0?'300px':'30vw'">
+                         :height="Browser===0?'350px':'30vw'">
                 <el-carousel-item trigger="click" v-for="item in bannerList" :key="item.bannerId">
+                    <div class="blur" :style="{backgroundImage:'url(' + (item.pic||item.imageUrl) + ')'}">
+                    </div>
                     <el-image class="elImg" @click="RouterTo(item)" fit="scale-down"
                               :src="item.pic||item.imageUrl"></el-image>
+
                 </el-carousel-item>
             </el-carousel>
         </div>
@@ -24,7 +27,8 @@
             <el-row class="mBox" :gutter="5">
                 <el-col class="card" v-for="item in HotList" :key="item.id" :xs="8" :sm="4" :md="4" :lg="4" :xl="4">
                     <el-card :body-style="{ padding: '0px' }">
-                        <el-image fit="fill" @click="HotListTo(item)" :src="item.coverImgUrl" :class="[Browser===0?'image':'imagePhone']"></el-image>
+                        <el-image fit="fill" @click="HotListTo(item)" :src="item.coverImgUrl"
+                                  :class="[Browser===0?'image':'imagePhone']"></el-image>
                         <div @click="HotListTo(item)" style="padding: 10px;height: 60px;overflow: hidden">
                             <span class="description">{{item.name}}</span>
                             <div class="bottom clearFix">
@@ -233,12 +237,25 @@
         background-color: transparent;
     }
 
-
-
-    .elImg {
+    .blur {
+        position: relative;
+        top: 0;
         width: 100%;
         height: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        filter: blur(10px);
+    }
+
+    .elImg {
+        top: 0;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
         overflow: hidden;
+
 
         :hover {
             cursor: pointer;
@@ -270,19 +287,21 @@
         width: 100%;
         padding-bottom: 100%;
         display: block;
+
         :hover {
             transition: all 0.5s; /* 所有的属性变化在0.5s的时间段内完成 */
             cursor: pointer;
             transform: scale(1.2);
         }
-        /deep/img{
-            position:absolute;
-            top:0;
-            bottom:0;
-            left:0;
-            right:0;
-            width:100%;
-            margin:auto;
+
+        /deep/ img {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            margin: auto;
         }
     }
 
@@ -290,33 +309,37 @@
         width: 100%;
         display: block;
         padding-bottom: 100%;
-       /deep/ img{
-            position:absolute;
-            top:0;
-            bottom:0;
-            left:0;
-            right:0;
-            width:100%;
-            margin:auto;
+
+        /deep/ img {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            margin: auto;
         }
     }
+
     .imageMv {
         width: 100%;
         padding-bottom: 60%;
         display: block;
+
         :hover {
             transition: all 0.5s; /* 所有的属性变化在0.5s的时间段内完成 */
             cursor: pointer;
             transform: scale(1.2);
         }
-        /deep/img{
-            position:absolute;
-            top:0;
-            bottom:0;
-            left:0;
-            right:0;
-            width:100%;
-            margin:auto;
+
+        /deep/ img {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            margin: auto;
         }
     }
 
@@ -324,14 +347,15 @@
         width: 100%;
         display: block;
         padding-bottom: 60%;
-       /deep/ img{
-            position:absolute;
-            top:0;
-            bottom:0;
-            left:0;
-            right:0;
-            width:100%;
-            margin:auto;
+
+        /deep/ img {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            margin: auto;
         }
     }
 

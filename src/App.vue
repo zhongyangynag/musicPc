@@ -2,18 +2,13 @@
     <div id="app">
         <router-view/>
         <div class="play">
-            <play/>
+            <Play/>
         </div>
     </div>
 </template>
 <script>
-    import Play from '@/components/Play.vue'
-
     export default {
         name: 'Home',
-        components: {
-            Play
-        },
     }
 </script>
 
@@ -24,6 +19,8 @@
         position: fixed;
         z-index: 5;
         bottom: 0;
+        left: 0;
+        right: 0;
     }
 
     #app {
