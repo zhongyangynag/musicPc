@@ -1,21 +1,21 @@
 'use strict'
-// const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-// const productionGzipExtensions = ['js', 'css']
+const productionGzipExtensions = ['js', 'css']
 module.exports = {
     productionSourceMap: false,
-    configureWebpack() {
+    configureWebpack(config) {
         if (process.env.NODE_ENV === 'production') {
-            // let CompressionPlugin =  new CompressionWebpackPlugin({
-            //     filename: '[path].gz[query]',
-            //     algorithm: 'gzip',
-            //     test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
-            //     threshold: 10240,
-            //     minRatio: 0.8,
-            //     deleteOriginalAssets: false, //删除源文件，不建议
-            //
-            // })
-            // config.plugins.push(CompressionPlugin)
+            let CompressionPlugin =  new CompressionWebpackPlugin({
+                filename: '[path].gz[query]',
+                algorithm: 'gzip',
+                test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
+                threshold: 10240,
+                minRatio: 0.8,
+                deleteOriginalAssets: false, //删除源文件，不建议
+
+            })
+            config.plugins.push(CompressionPlugin)
 
         }else {
             return {
