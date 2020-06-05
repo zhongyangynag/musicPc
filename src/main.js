@@ -7,17 +7,14 @@ import VueAxios from 'vue-axios'
 import {checkBrowser,check,getSong} from "@/utils/utils";
 import play from '@/components/Play.vue'
 
-import ElementUI from 'element-ui';
+
 import 'element-ui/lib/theme-chalk/index.css';
 import 'element-ui/lib/theme-chalk/display.css';
+import ElementUI from 'element-ui';
 import _ from 'lodash'
 
-// require('video.js/dist/video-js.css')
-// require('vue-video-player/src/custom-theme.css')
-// require('…/static/css/myvideo.css') //如果你需要自定义播放器的样式，自己新建一个css
-// import VideoPlayer from 'vue-video-player'
-//引入 hls
-// import 'videojs-contrib-hls'
+import VideoPlayer from 'vue-video-player'
+
 import Moment from 'moment'
 
 // 定义全局时间戳过滤器
@@ -63,7 +60,6 @@ Vue.filter('formatName', function(value) {
     }
 
 })
-
 Vue.component('Play',play)
 Vue.use(ElementUI);
 Vue.prototype._ = _
@@ -71,7 +67,7 @@ Vue.prototype.checkBrowser = checkBrowser
 Vue.prototype.check = check
 Vue.prototype.getSong = getSong
 Vue.use(VueAxios, axios)
-// Vue.use(VideoPlayer)
+Vue.use(VideoPlayer)
 Vue.config.productionTip = false
 
 new Vue({

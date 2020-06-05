@@ -48,10 +48,10 @@
             <el-row class="mBox" :gutter="5">
                 <el-col class="card" v-for="item in MvList" :key="item.id" :xs="8" :sm="8" :md="6" :lg="6" :xl="6">
                     <el-card :body-style="{ padding: '0px' }">
-                        <el-image fit="fill" @click="HotListTo(item)" :src="item.picUrl"
+                        <el-image fit="fill" @click="MvTo(item)" :src="item.picUrl"
                                   :class="[Browser===0?'imageMv':'imageMvPhone']"></el-image>
 
-                        <div @click="HotListTo(item)" style="padding: 5px;height: 60px;overflow: hidden">
+                        <div @click="MvTo(item)" style="padding: 5px;height: 60px;overflow: hidden">
                             <span class="description">{{item.name}}</span>
                             <div class="bottom clearFix">
                                 <time class="time">{{item.playCount|filterNum}}</time>
@@ -127,6 +127,11 @@
             HotListTo(item) {
                 console.log(item)
                 this.$router.push({path: '/MusicListDetail', query: {id: item.id}});
+            },
+            //跳转歌单详情页面
+            MvTo(item) {
+                console.log(item)
+                this.$router.push({path: '/MvPlay', query: {id: item.id}});
             },
             //获取轮播图
             getBanner() {

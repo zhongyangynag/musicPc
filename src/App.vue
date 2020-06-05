@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <router-view/>
-        <div class="play">
+        <div v-if="showPlay" class="play">
             <Play/>
         </div>
     </div>
@@ -9,6 +9,17 @@
 <script>
     export default {
         name: 'Home',
+        data(){
+            return{
+                showPlay:true
+            }
+        },
+        watch: {
+            $route() {
+                this.showPlay = !(this.$route.path === "/MvPlay");
+
+            }
+        }
     }
 </script>
 

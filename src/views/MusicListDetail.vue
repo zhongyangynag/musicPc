@@ -6,7 +6,7 @@
         <div class="musicList">
             <el-row>
                 <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                    <div>
+                    <div v-if="Detail.coverImgUrl">
                         <el-image
                                 class="elimg"
                                 style="width: 100%;"
