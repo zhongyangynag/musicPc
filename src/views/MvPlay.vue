@@ -12,7 +12,6 @@
                     @pause="onPlayerPause($event)"
             />
         </div>
-
     </div>
 </template>
 
@@ -84,8 +83,6 @@
                     }
                     // console.log(res.data.data)
                     this.playerOptions.poster = res.data.data.cover
-                }).catch(err => {
-                    console.log(err)
                 })
             },
             getMv() {
@@ -102,8 +99,6 @@
                     }
                     this.playerOptions.sources[0].src = res.data.data.url
 
-                }).catch(err => {
-                    console.log(err)
                 })
             }
         },
