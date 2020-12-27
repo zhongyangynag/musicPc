@@ -16,7 +16,7 @@
         <!--        歌单-->
         <div style="margin-top: 10px;margin-bottom: 10px">
             <div class="mType">
-                <div class="mTypeText">精选233</div>
+                <div class="mTypeText">精选</div>
                 <div class="mTypeChose">
                     <span :class="[this.listType==='hot'?'hot':'']" @click="playlist('hot')">最热</span>
                     <span class="line"></span>
