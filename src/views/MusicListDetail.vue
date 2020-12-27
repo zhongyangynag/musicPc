@@ -2,7 +2,7 @@
     <div class="MusicListDetail">
         <Header page="index3"/>
         <div class="hidden-xs-only" style="width: 100%;height: 40px"></div>
-        <div style="width: 100%;height: 42px"></div>
+        <div style="width: 100%;height: 43px"></div>
         <div class="musicList">
             <el-row>
                 <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">

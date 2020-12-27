@@ -1,8 +1,8 @@
 <template>
     <div class="home">
         <Header page="index"/>
-        <div style="width: 100%;height: 42px"></div>
-        <div style="margin-top: 10px">
+        <div style="width: 100%;height: 43px"></div>
+        <div>
             <el-carousel :interval="9000" :indicator-position="Browser===0?'':'none'"
                          :height="Browser===0?'350px':'30vw'">
                 <el-carousel-item trigger="click" v-for="item in bannerList" :key="item.bannerId">
@@ -10,14 +10,13 @@
                     </div>
                     <el-image class="elImg" @click="RouterTo(item)" fit="scale-down"
                               :src="item.pic||item.imageUrl"></el-image>
-
                 </el-carousel-item>
             </el-carousel>
         </div>
         <!--        歌单-->
         <div style="margin-top: 10px;margin-bottom: 10px">
             <div class="mType">
-                <div class="mTypeText">精选</div>
+                <div class="mTypeText">精选233</div>
                 <div class="mTypeChose">
                     <span :class="[this.listType==='hot'?'hot':'']" @click="playlist('hot')">最热</span>
                     <span class="line"></span>
@@ -78,7 +77,6 @@
         },
         data() {
             return {
-                listType: 'hot',//精选默认type
                 bannerList: [],//轮播图片
                 HotList: [],//热门歌曲
                 MvList: [],//Mv
@@ -87,6 +85,9 @@
         computed: {
             Browser() {
                 return this.checkBrowser()
+            },
+            listType(){
+                return this.$store.state.SelectedType
             }
         },
         filters: {
@@ -159,8 +160,8 @@
             },
             //获取最新或最热歌单
             playlist(val) {
-                if (val) {
-                    this.listType = val
+                if(val){
+                    this.$store.commit('changeSelectedType', val)
                 }
                 this.axios({
                         method: "get",

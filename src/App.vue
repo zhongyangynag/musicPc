@@ -43,6 +43,10 @@
         /*text-align: center;*/
         /*color: #2c3e50;*/
     }
+    video, button{
+        outline: none
+    }
+
 
     body {
         margin: 0;

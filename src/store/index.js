@@ -14,11 +14,11 @@ export default new Vuex.Store({
         },//当前播放的
         musicList: [],//当前播放的list
         playIng: false,//播放
+        SelectedType:'hot',
 
     },
     mutations: {
         changeMusic(state, payload) {
-
             state.musicList.unshift(payload[0])
             let list = state.musicList
             let hash = {};
@@ -34,6 +34,9 @@ export default new Vuex.Store({
             // console.log(payload)
             state.playIng = payload
         },
+        changeSelectedType(state,payload){
+            state.SelectedType = payload
+        }
     },
     actions: {},
     modules: {}
