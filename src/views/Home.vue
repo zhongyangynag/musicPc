@@ -135,26 +135,26 @@
             },
             //获取轮播图
             getBanner() {
-                this.axios({
+                this.request({
                         method: "get",
-                        url: process.env.VUE_APP_API + "/banner",
+                        url: "/banner",
                         params: {
                             type: this.Browser || 0,
                             timestamp: new Date().getTime()
                         }
                     }
                 ).then(res => {
-                    if (res.status !== 200) {
+                    if (res.code !== 200) {
                         this.$message('请求错误哦！');
                     }
-                    console.log(res.data)
+                    console.log(res,'banner')
 
-                    let list = res.data && res.data.banners || []
+                    let list = res && res.banners || []
                     this.bannerList = this._.filter(list, unit => {
                         return unit.targetId !== 0
                     })
-                }).catch(err => {
-                    console.log(err)
+                }).catch(() => {
+
                 })
             },
             //获取最新或最热歌单
@@ -162,9 +162,9 @@
                 if (val) {
                     this.listType = val
                 }
-                this.axios({
+                this.request({
                         method: "get",
-                        url: process.env.VUE_APP_API + "/top/playlist",
+                        url: "/top/playlist",
                         params: {
                             limit: this.Browser === 0 ? 12 : 6,
                             order: this.listType || 'hot',
@@ -172,38 +172,38 @@
                         }
                     }
                 ).then(res => {
-                    if (res.status !== 200) {
+                    if (res.code !== 200) {
                         this.$message('获取热门歌单失败！');
                     }
-                    console.log(res.data)
+                    // console.log(res.data)
 
-                    this.HotList = res.data && res.data.playlists || []
+                    this.HotList = res && res.playlists || []
                     // this.HotList = this._.filter(list, unit => {
                     //     return unit.targetId !== 0
                     // })
-                }).catch(err => {
-                    console.log(err)
+                }).catch(() => {
+                    // console.log(err)
                 })
             },
             //获取推荐Mv
             personalized() {
-                this.axios({
+                this.request({
                         method: "get",
-                        url: process.env.VUE_APP_API + "/personalized/mv",
+                        url: "/personalized/mv",
                         params: {
                             timestamp: new Date().getTime()
                         }
                     }
                 ).then(res => {
-                    if (res.status !== 200) {
+                    if (res.code !== 200) {
                         this.$message('获取Mv失败！');
                     }
-                    console.log(res.data.result)
-                    if (res.data && res.data.result) {
+                    // console.log(res.data.result)
+                    if (res && res.result) {
                         if (this.Browser === 0) {
-                            this.MvList = res.data.result
+                            this.MvList = res.result
                         } else {
-                            this.MvList = res.data.result.slice(0, 3)
+                            this.MvList = res.result.slice(0, 3)
                         }
 
                     } else {
@@ -213,8 +213,8 @@
                     // this.HotList = this._.filter(list, unit => {
                     //     return unit.targetId !== 0
                     // })
-                }).catch(err => {
-                    console.log(err)
+                }).catch(() => {
+
                 })
             },
 

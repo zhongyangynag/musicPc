@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import {setCookie,getCookie} from "@/utils/utils";
 
 Vue.use(Vuex)
 
@@ -14,11 +15,11 @@ export default new Vuex.Store({
         },//当前播放的
         musicList: [],//当前播放的list
         playIng: false,//播放
+        cookie:getCookie('cookies'),
 
     },
     mutations: {
         changeMusic(state, payload) {
-
             state.musicList.unshift(payload[0])
             let list = state.musicList
             let hash = {};
@@ -33,6 +34,11 @@ export default new Vuex.Store({
         changePlayIng(state, payload) {
             // console.log(payload)
             state.playIng = payload
+        },
+        changeCookie(state, payload) {
+            console.log(payload)
+            setCookie('cookies',payload,5)
+            state.cookie = payload
         },
     },
     actions: {},

@@ -6,6 +6,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import {checkBrowser,check,getSong} from "@/utils/utils";
 import play from '@/components/Play.vue'
+import request from '@/request'
 
 
 import 'element-ui/lib/theme-chalk/index.css';
@@ -65,6 +66,7 @@ Vue.use(ElementUI);
 Vue.prototype._ = _
 Vue.prototype.checkBrowser = checkBrowser
 Vue.prototype.check = check
+Vue.prototype.request = request
 Vue.prototype.getSong = getSong
 Vue.use(VueAxios, axios)
 Vue.use(VideoPlayer)

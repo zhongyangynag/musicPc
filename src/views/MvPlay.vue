@@ -70,34 +70,34 @@
                 this.playing = false
             },
             getMvDetail() {
-                this.axios({
+                this.request({
                         method: "get",
-                        url: process.env.VUE_APP_API + "/mv/detail",
+                        url:  "/mv/detail",
                         params: {
                             mvid: this.$route.query.id || '',
                         }
                     }
                 ).then(res => {
-                    if (res.status !== 200) {
+                    if (res.code !== 200) {
                         this.$message('请求错误哦！');
                     }
                     // console.log(res.data.data)
-                    this.playerOptions.poster = res.data.data.cover
+                    this.playerOptions.poster = res.data.cover
                 })
             },
             getMv() {
-                this.axios({
+                this.request({
                         method: "get",
-                        url: process.env.VUE_APP_API + "/mv/url",
+                        url:  "/mv/url",
                         params: {
                             id: this.$route.query.id || '',
                         }
                     }
                 ).then(res => {
-                    if (res.status !== 200) {
+                    if (res.code !== 200) {
                         this.$message('请求错误哦！');
                     }
-                    this.playerOptions.sources[0].src = res.data.data.url
+                    this.playerOptions.sources[0].src = res.data.url
 
                 })
             }

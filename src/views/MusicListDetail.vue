@@ -118,7 +118,7 @@
             },
             //点击当前行
             clickRow(row) {
-                // console.log(row)
+                console.log(row)
                 // console.log(this.$parent.$children[0])
                 let _this = this
                 // this.$parent.$children[0].$refs.player.play()
@@ -127,13 +127,14 @@
                 let title = row.name
                 // console.log(alPicUrl)
                 this.check(row.id).then(res => {
-                    if (res.data.success) {
+                    if (res.success) {
                         this.getSong(row.id).then(res => {
-                            if (res.data.data[0].url === null) {
+                            console.log(res)
+                            if (res.data[0].url === null) {
                                 this.$message('亲爱的,这首歌播放不了哦！')
                             } else {
                                 //准备单手歌曲的数据格式
-                                let songMsg = this._.map(res.data.data, unit => {
+                                let songMsg = this._.map(res?.data, unit => {
                                     return {
                                         src: unit.url,
                                         mId: unit.id,
@@ -142,6 +143,7 @@
                                         pic
                                     }
                                 })
+                                console.log(songMsg)
                                 //vuex==》替换当前歌曲
                                 this.$store.commit('changeMusic', songMsg)
                                 //设置延时，否则歌曲未加载完成就播放会是上一首歌曲的数据
@@ -155,12 +157,11 @@
                             console.log(error)
                         })
                     } else {
-                        this.$message(res.data.message)
+                        this.$message(res.message)
                     }
                     // console.log(res)
-                }).catch(err => {
+                }).catch(() => {
                     this.$message('亲爱的,暂无版权')
-                    console.log(err,)
                 })
 
 
@@ -168,24 +169,24 @@
             },
             //获取歌单详情
             playlistDetail() {
-                this.axios({
+                this.request({
                         method: "get",
-                        url: process.env.VUE_APP_API + "/playlist/detail",
+                        url:  "/playlist/detail",
                         params: {
                             id: this.$route.query.id || '',
                             timestamp: new Date().getTime()
                         }
                     }
                 ).then(res => {
-                    if (res.status !== 200) {
+                    if (res.code !== 200) {
                         this.$message('请求错误哦！');
                     }
                     // console.log(res.data.playlist.description)
-                    let test = res.data.playlist.description
-                    this.Detail = res.data.playlist
+                    let test = res.playlist.description
+                    this.Detail = res.playlist
                     this.Detail.description = test.replace(/[\r\n]/g, "testCode").split('testCode').splice(0, 3)
                     this.Detail.descriptionlast = test.replace(/[\r\n]/g, "testCode").split('testCode').splice(3)
-                    let list = res.data && res.data.playlist.trackIds || []
+                    let list = res && res.playlist.trackIds || []
                     let ids = this._.map(list, unit => {
                         return unit.id
                     }).splice(0, 100)
@@ -197,19 +198,19 @@
             },
             //    获取歌单所有歌曲
             getAllSong(val) {
-                this.axios({
+                this.request({
                         method: "get",
-                        url: process.env.VUE_APP_API + "/song/detail",
+                        url:  "/song/detail",
                         params: {
                             ids: val.toString() || '',
                             timestamp: new Date().getTime()
                         }
                     }
                 ).then(res => {
-                    if (res.status !== 200) {
+                    if (res.code !== 200) {
                         this.$message('请求错误哦！');
                     }
-                    this.songlist = res.data && res.data.songs || []
+                    this.songlist = res && res.songs || []
                     // console.log(res.data.songs)
                 }).catch(err => {
                     console.log(err)

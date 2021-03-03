@@ -49,42 +49,60 @@ export function checkBrowser() {
 //检查当前歌曲是否可用
 export function check(val) {
     return new Promise((resolve, reject) => {
-        this.axios({
-            method: "get",
-            url: process.env.VUE_APP_API + "/check/music",
-            params: {
-                id: val,
+        this.request({
+                method: "get",
+                url:  "/check/music",
+                params: {
+                    id: val,
 
+                }
             }
-        }
-    ).then(res => {
+        ).then(res => {
             resolve(res)
 
-    }).catch(error => {
+        }).catch(error => {
             reject(error)
-    })
+        })
     })
 
 }
+
 //获取歌曲播放地址
 export function getSong(val) {
     return new Promise((resolve, reject) => {
-        this.axios({
-            method: "get",
-            url: process.env.VUE_APP_API + "/song/url",
-            params: {
-                id: val,
+        this.request({
+                method: "get",
+                url:  "/song/url",
+                params: {
+                    id: val,
+                }
             }
-        }
-    ).then(res => {
+        ).then(res => {
             resolve(res)
 
-    }).catch(error => {
+        }).catch(error => {
             reject(error)
-    })
+        })
     })
 
 }
 
+
+export function setCookie(cname, cvalue, exdays) {
+    let d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + d.toGMTString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+export function getCookie(cname) {
+    let name = cname + "=";
+    let ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i].trim();
+        if (c.indexOf(name) === 0) return c.substring(name.length, c.length);
+    }
+    return "";
+}
 
 
