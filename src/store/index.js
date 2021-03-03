@@ -16,6 +16,7 @@ export default new Vuex.Store({
         musicList: [],//当前播放的list
         playIng: false,//播放
         cookie:getCookie('cookies'),
+        SelectedType:'hot',
 
     },
     mutations: {
@@ -34,6 +35,9 @@ export default new Vuex.Store({
         changePlayIng(state, payload) {
             // console.log(payload)
             state.playIng = payload
+        },
+        changeSelectedType(state,payload){
+            state.SelectedType = payload
         },
         changeCookie(state, payload) {
             console.log(payload)
