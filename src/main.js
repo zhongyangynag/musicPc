@@ -6,6 +6,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import {checkBrowser,check,getSong} from "@/utils/utils";
 import play from '@/components/Play.vue'
+import Header from '@/components/Header.vue'
 import request from '@/request'
 
 
@@ -62,12 +63,14 @@ Vue.filter('formatName', function(value) {
 
 })
 Vue.component('Play',play)
+Vue.component('Header',Header)
 Vue.use(ElementUI);
 Vue.prototype._ = _
 Vue.prototype.checkBrowser = checkBrowser
 Vue.prototype.check = check
 Vue.prototype.request = request
 Vue.prototype.getSong = getSong
+axios.defaults.withCredentials = true;//允许跨域携带cookie信息
 Vue.use(VueAxios, axios)
 Vue.use(VideoPlayer)
 Vue.config.productionTip = false

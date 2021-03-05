@@ -1,6 +1,5 @@
 <template>
     <div class="MvBox">
-        <Header/>
         <div class="Mv">
             <video-player
                     v-if="playerOptions.sources[0].src"
@@ -17,12 +16,10 @@
 
 <script>
 
-    import Header from '@/components/Header.vue'
 
     export default {
         name: "MvPlay",
         components: {
-            Header,
         },
         data() {
             return {
@@ -124,12 +121,12 @@
 
     .Mv {
         margin: 0 auto;
-        width: 1200px;
+        max-width: 1200px;
         text-align: center;
     }
 
     .video-player {
-        margin-top: 40px;
+        /*margin-top: 40px;*/
     }
 
 </style>

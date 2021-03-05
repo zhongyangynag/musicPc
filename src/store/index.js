@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {setCookie,getCookie} from "@/utils/utils";
 
 Vue.use(Vuex)
 
@@ -15,8 +14,12 @@ export default new Vuex.Store({
         },//当前播放的
         musicList: [],//当前播放的list
         playIng: false,//播放
-        cookie:getCookie('cookies'),
-        SelectedType:'hot',
+        SelectedType: 'hot',
+        loginStatus: false,
+        loginInfo: {
+            account: {},
+            profile: {},
+        }
 
     },
     mutations: {
@@ -36,14 +39,22 @@ export default new Vuex.Store({
             // console.log(payload)
             state.playIng = payload
         },
-        changeSelectedType(state,payload){
+        changeSelectedType(state, payload) {
             state.SelectedType = payload
         },
-        changeCookie(state, payload) {
-            console.log(payload)
-            setCookie('cookies',payload,5)
-            state.cookie = payload
+        changeLoginStatus(state, payload) {
+            state.loginStatus = payload
         },
+        changeLoginInfo(state, payload) {
+            state.loginInfo = {...payload}
+        },
+        clearLoginInfo(state) {
+            state.loginInfo = {
+                account: {},
+                profile: {},
+            }
+        }
+
     },
     actions: {},
     modules: {}

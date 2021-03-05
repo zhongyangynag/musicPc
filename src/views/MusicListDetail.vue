@@ -1,8 +1,5 @@
 <template>
     <div class="MusicListDetail">
-        <Header page="index3"/>
-        <div class="hidden-xs-only" style="width: 100%;height: 40px"></div>
-        <div style="width: 100%;height: 43px"></div>
         <div class="musicList">
             <el-row>
                 <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
@@ -97,12 +94,12 @@
 </template>
 
 <script>
-    import Header from '@/components/Header.vue'
+    // import Header from '@/components/Header.vue'
 
     export default {
         name: "MusicListDetail",
         components: {
-            Header,
+            // Header,
         },
         data() {
             return {
@@ -136,7 +133,7 @@
                                 //准备单手歌曲的数据格式
                                 let songMsg = this._.map(res?.data, unit => {
                                     return {
-                                        src: unit.url,
+                                        src: unit.url+`?timestamp=${new Date().getTime()}`,
                                         mId: unit.id,
                                         artist,
                                         title,
@@ -174,7 +171,6 @@
                         url:  "/playlist/detail",
                         params: {
                             id: this.$route.query.id || '',
-                            timestamp: new Date().getTime()
                         }
                     }
                 ).then(res => {
@@ -203,7 +199,6 @@
                         url:  "/song/detail",
                         params: {
                             ids: val.toString() || '',
-                            timestamp: new Date().getTime()
                         }
                     }
                 ).then(res => {

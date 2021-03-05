@@ -1,7 +1,6 @@
 <template>
     <div class="home">
-        <Header page="index"/>
-        <div style="width: 100%;height: 43px"></div>
+<!--        <Header page="index"/>-->
         <div>
             <el-carousel :interval="9000" :indicator-position="Browser===0?'':'none'"
                          :height="Browser===0?'350px':'30vw'">
@@ -68,12 +67,12 @@
 
 <script>
     // @ is an alias to /src
-    import Header from '@/components/Header.vue'
+    // import Header from '@/components/Header.vue'
 
     export default {
         name: 'Home',
         components: {
-            Header,
+            // Header,
         },
         data() {
             return {
@@ -121,17 +120,17 @@
                 } else if (item.targetType === 1004) {
                     this.$router.push({path: '/MvPlay', query: {id: item.targetId}});
                 }
-                console.log(item)
+                // console.log(item)
                 // this.$router.push({path: '/MusicListDetail', query: {id: item.targetId}});
             },
             //跳转歌单详情页面
             HotListTo(item) {
-                console.log(item)
+                // console.log(item)
                 this.$router.push({path: '/MusicListDetail', query: {id: item.id}});
             },
             //跳转歌单详情页面
             MvTo(item) {
-                console.log(item)
+                // console.log(item)
                 this.$router.push({path: '/MvPlay', query: {id: item.id}});
             },
             //获取轮播图
@@ -141,14 +140,13 @@
                         url: "/banner",
                         params: {
                             type: this.Browser || 0,
-                            timestamp: new Date().getTime()
                         }
                     }
                 ).then(res => {
                     if (res.code !== 200) {
                         this.$message('请求错误哦！');
                     }
-                    console.log(res,'banner')
+                    // console.log(res,'banner')
 
                     let list = res && res.banners || []
                     this.bannerList = this._.filter(list, unit => {
@@ -169,7 +167,6 @@
                         params: {
                             limit: this.Browser === 0 ? 12 : 6,
                             order: this.listType || 'hot',
-                            timestamp: new Date().getTime()
                         }
                     }
                 ).then(res => {
@@ -191,9 +188,6 @@
                 this.request({
                         method: "get",
                         url: "/personalized/mv",
-                        params: {
-                            timestamp: new Date().getTime()
-                        }
                     }
                 ).then(res => {
                     if (res.code !== 200) {

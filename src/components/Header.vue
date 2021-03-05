@@ -1,21 +1,39 @@
 <template>
     <div>
         <header class="header-box">
-            <el-row>
-                <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="1">
+            <el-row type="flex">
+                <el-col>
                     <div @click="$router.push({path:'/'})" :class="[page==='index'?'header active':'header']">推荐</div>
                 </el-col>
-                <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="11">
+                <el-col>
                     <div :class="[page==='index2'?'header active':'header']">排行榜</div>
                 </el-col>
-                <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="11">
+                <el-col>
                     <div :class="[page==='index3'?'header active':'header']">歌单</div>
                 </el-col>
-                <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="1">
+                <el-col>
                     <div :class="[page==='index4'?'header active':'header']">歌手</div>
                 </el-col>
-                <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="1">
+                <el-col v-if="!loginStatus">
                     <div :class="[page==='index5'?'header active':'header']" @click="dialogVisible = true">登录</div>
+                </el-col>
+                <el-col v-else>
+                    <div style="height: 100%;display: flex;align-items: center;justify-content: center">
+                        <el-dropdown @command="handleCommand" trigger="click">
+                            <div class="el-dropdown-link">
+                                <el-image
+                                        v-if="loginInfo.profile.avatarUrl"
+                                        style="width: 20px; height: 20px;vertical-align: middle"
+                                        :src="loginInfo.profile.avatarUrl"
+                                        fit="cover"></el-image>
+                                <i class="el-icon-arrow-down el-icon--right"></i>
+                            </div>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="loginOut" icon="el-icon-user">退出登录</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
+                    <!--                    <div :class="[page==='index6'?'header active':'header']" @click="dialogVisible = true">个人中心</div>-->
                 </el-col>
             </el-row>
         </header>
@@ -23,7 +41,7 @@
                 center
                 title="登录"
                 :visible.sync="dialogVisible"
-                width="30%"
+                :width="Browser===0?'400px':'80%'"
                 :before-close="handleClose">
             <el-form v-if="!QrCode" ref="form" :rules="rules" label-position="left" :model="form" label-width="80px">
                 <el-form-item v-if="email" prop="email" label="邮箱">
@@ -68,9 +86,9 @@
                 QrCode: false,
                 email: false,
                 form: {
-                    phone: '',
+                    phone: '17782149108',
                     email: '',
-                    password: '',
+                    password: 'Nuttert123456',
 
                 },
                 dialogVisible: false,
@@ -91,8 +109,22 @@
                 QrCodeStaus: ''
             };
         },
+        computed: {
+            Browser() {
+                return this.checkBrowser()
+            },
+            loginStatus() {
+                return this.$store.state.loginStatus
+            },
+            loginInfo() {
+                return this.$store.state.loginInfo
+            }
+        },
+
         props: ['page'],
         created() {
+            // this.$store.commit('changeMusic',)
+            this.getLoginStatus()
 
         },
         watch: {
@@ -100,37 +132,88 @@
                 if (val) {
                     this.getQrCodeKey()
                 }
+            },
+            email(){
+                this.$refs.form.resetFields();
             }
         },
         methods: {
-
-            getQrCodeKey() {
-                this.axios({
+            loginOut() {
+                this.request({
                         method: "get",
-                        url: "/login/qr/key?timestamp=" + new Date().getTime(),
+                        url: "/logout",
                     }
                 ).then(res => {
-                    if (res.status !== 200) {
+                    if (res.code !== 200) {
                         this.$message('请求错误哦！');
                         return
                     }
-                    this.createQrCode(res.data.data.unikey)
-                    this.unikey = res.data.data.unikey
+                    this.$message('退出登录');
+                    this.$store.commit('changeLoginStatus', false)
+                    this.$store.commit('clearLoginInfo')
+
+
+                    console.log(res)
+                }).catch(() => {
+                    this.$message('出错了哦！');
+                })
+            },
+            handleCommand(command) {
+                if (command === 'loginOut') {
+                    this.loginOut()
+                }
+            },
+            getLoginStatus() {
+                this.request({
+                        method: "get",
+                        url: "/login/status",
+                    }
+                ).then(res => {
+                    if (res.data.code !== 200) {
+                        this.$message('请求错误哦！');
+                        return
+                    }
+                    if (res.data.account !== null || res.data.profile !== null) {
+                        this.$store.commit('changeLoginInfo', res.data)
+                        this.$store.commit('changeLoginStatus', true)
+                    } else {
+                        this.$store.commit('changeLoginStatus', false)
+
+                    }
+
+                    console.log(res)
+                }).catch(() => {
+                    this.$message('出错了哦！');
+                })
+            },
+
+            getQrCodeKey() {
+                this.request({
+                        method: "get",
+                        url: "/login/qr/key",
+                    }
+                ).then(res => {
+                    if (res.code !== 200) {
+                        this.$message('请求错误哦！');
+                        return
+                    }
+                    this.createQrCode(res.data.unikey)
+                    this.unikey = res.data.unikey
                 }).catch(() => {
                     this.$message('出错了哦！');
                 })
             },
             createQrCode(key) {
-                this.axios({
+                this.request({
                         method: "get",
-                        url:  `/login/qr/create?key=${key}&qrimg=true&timestamp=` + new Date().getTime(),
+                        url: `/login/qr/create?key=${key}&qrimg=true`,
                     }
                 ).then(res => {
-                    if (res.status !== 200) {
+                    if (res.code !== 200) {
                         this.$message('请求错误哦！');
                         return
                     }
-                    this.qrUrl = res.data.data.qrimg
+                    this.qrUrl = res.data.qrimg
                     this.checkKey()
                 }).catch(() => {
                     this.qrUrl = ""
@@ -138,18 +221,18 @@
                 })
             },
             checkKey() {
-                this.axios({
+                this.request({
                         method: "get",
-                        url:  `/login/qr/check?key=${this.unikey}&timestamp=` + new Date().getTime(),
+                        url: `/login/qr/check?key=${this.unikey}`,
                     }
-                ).then(res => {
-                    debugger
-                    if (res.status !== 200) {
-                        this.$message('请求错误哦！');
-                        return
-                    }
+                ).then((res) => {
+                    // if (res.code !== 200) {
+                    //     this.$message('请求错误哦！');
+                    //     return
+                    // }
+                    // console.log(res)
                     if (this.QrCode) {
-                        switch (res.data.code) {
+                        switch (res.code) {
                             case 800:
                                 this.QrCodeStaus = 800
                                 break;
@@ -167,8 +250,11 @@
                                 break;
                             case 803:
                                 this.QrCodeStaus = 803
-                                console.log(res,'803')
-                                this.$store.commit('changeCookie', res.data.cookie)
+                                // console.log(res,'803')
+                                this.dialogVisible = false
+                                this.QrCode = false
+                                this.getLoginStatus()
+                                // this.$store.commit('changeCookie', res.cookie)
                                 break;
                             default:
                                 this.QrCodeStaus = ''
@@ -185,21 +271,21 @@
                     if (valid) {
                         this.onSubmit()
                     } else {
-                        console.log('error submit!!');
+                        // console.log('error submit!!');
                         return false;
                     }
                 });
             },
             onSubmit() {
-                console.log('submit!');
+                // console.log('submit!');
                 let loginData = {}
-                let loginUrl =  "/login/cellphone"
+                let loginUrl = "/login/cellphone"
                 if (this.email) {
                     loginData = {
                         email: this.form.email,
                         password: this.form.password
                     }
-                    loginUrl =  "/login"
+                    loginUrl = "/login"
                 } else {
                     loginData = {
                         phone: this.form.phone,
@@ -212,25 +298,26 @@
                         data: loginData
                     }
                 ).then(res => {
-                    if (res.status !== 200) {
+                    if (res.code !== 200) {
                         this.$message('请求错误哦！');
                     }
-                    if (res.data.code !== 200) {
-                        this.$message(res.data.message);
+                    this.dialogVisible = false
+                    if (res.account !== null || res.profile !== null) {
+                        this.$store.commit('changeLoginInfo', res)
+                        this.$store.commit('changeLoginStatus', true)
+                    } else {
+                        this.$store.commit('changeLoginStatus', false)
                     }
 
-                    console.log(res.data)
+                    // console.log(res.data)
                 }).catch(err => {
                     console.log(err)
                 })
             },
             handleClose(done) {
-                this.$confirm('确认关闭？')
-                    .then(() => {
-                        done();
-                    })
-                    .catch(() => {
-                    });
+                this.QrCode = false
+                this.$refs.form.resetFields();
+                done()
             }
 
         }
@@ -243,6 +330,7 @@
         color: white;
         position: fixed;
         top: 0;
+        left: 0;
         width: 100%;
         text-align: center;
         z-index: 5;
@@ -261,6 +349,7 @@
     .header {
         padding: 10px 5px;
         text-align: center;
+        font-size: 14px;
     }
 
     .active {
@@ -293,5 +382,22 @@
     .el-image-Qrcode {
         width: 100%;
         height: 100%;
+    }
+
+    .el-dropdown-link {
+        cursor: pointer;
+        color: #fff;
+    }
+
+    .el-dropdown-link:focus {
+        outline: none;
+    }
+
+    .el-dropdown:focus {
+        outline: none;
+    }
+
+    .el-icon-arrow-down {
+        font-size: 12px;
     }
 </style>

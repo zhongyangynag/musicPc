@@ -1,5 +1,8 @@
 <template>
     <div id="app">
+        <Header></Header>
+        <div style="width: 100%;height: 40px"></div>
+
         <router-view/>
         <div v-if="showPlay" class="play">
             <Play/>
