@@ -86,9 +86,9 @@
                 QrCode: false,
                 email: false,
                 form: {
-                    phone: '17782149108',
+                    phone: '',
                     email: '',
-                    password: 'Nuttert123456',
+                    password: '',
 
                 },
                 dialogVisible: false,

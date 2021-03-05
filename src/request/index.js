@@ -23,7 +23,7 @@ function errorLog(err) {
 
 // 创建一个 axios 实例
 const service = axios.create({
-    baseURL: '/api',
+    baseURL:process.env.NODE_ENV === 'development'? '/api':process.env.VUE_APP_API,
     withCredentials:true,
     timeout: 10000 // 请求超时时间
 })
