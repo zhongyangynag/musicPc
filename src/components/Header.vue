@@ -338,12 +338,12 @@
 
     .header:hover {
         cursor: pointer;
-        background-color: #585858;
+        background-color: #ead8d8;
     }
 
     .header:active {
         cursor: pointer;
-        background-color: #585858;
+        background-color: #ead8d8;
     }
 
     .header {
@@ -353,7 +353,7 @@
     }
 
     .active {
-        background-color: #585858;
+        background-color: #ead8d8;
     }
 
     .dialog-footer {
