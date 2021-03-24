@@ -281,7 +281,6 @@
     }
 
     .singerName {
-        width: 20vw;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap
