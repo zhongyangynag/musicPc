@@ -326,7 +326,7 @@
 
 <style scoped lang="less">
     .header-box {
-        background-color: #727272;
+        background-color: #dad0d0;
         color: white;
         position: fixed;
         top: 0;
